@@ -50,6 +50,10 @@ const controlServings = function (newServings) {
   recipeView.update(model.state.recipe);
 };
 
+const controlBookmark = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
+
 const controlAddBookmark = function () {
   if (model.state.recipe.bookmarked) {
     model.removeBookmark(model.state.recipe);
@@ -63,6 +67,7 @@ const controlAddBookmark = function () {
 };
 
 const init = function () {
+  bookmarksView.addHandlerRender(controlBookmark);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
