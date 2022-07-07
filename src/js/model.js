@@ -101,6 +101,34 @@ export const removeBookmark = function (recipe) {
   storeBookmark();
 };
 
+export const uploadRecipe = async function (recipe) {
+  try {
+    const ingredients = Object.entries(recipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ingredient => {
+        const ingArr = ingredient[1].replaceAll(' ', '').split(',');
+        if (ingArr.length !== 3) {
+          throw new Error('Please use the correct format for ingredients!');
+        }
+        const [quantity, unit, description] = ingArr;
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const newRecipe = {
+      id: recipe.id,
+      title: recipe.title,
+      source_url: recipe.sourceUrl,
+      image_url: recipe.image,
+      publisher: recipe.publisher,
+      cooking_time: +recipe.cookingTime,
+      servings: +recipe.servings,
+      ingredients,
+    };
+  } catch (err) {
+    throw err;
+  }
+};
+
 const init = function () {
   const storedBookmarks = localStorage.getItem('bookmarks');
   if (storedBookmarks) {
