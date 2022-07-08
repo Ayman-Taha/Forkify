@@ -1,6 +1,6 @@
 import { async } from 'regenerator-runtime';
-import { API_URL, RES_PER_PAGE } from './config';
-import { getJSON } from './helpers';
+import { API_KEY, API_URL, RES_PER_PAGE } from './config';
+import { getJSON, sendJSON } from './helpers';
 
 export const state = {
   recipe: {},
@@ -13,22 +13,26 @@ export const state = {
   bookmarks: [],
 };
 
+const formatRecipeObj = function (data) {
+  const { recipe } = data.data;
+
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    ...(recipe.key && { key: recipe.key }),
+  };
+};
+
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}/${id}`);
-    const { recipe } = data.data;
-
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
-
+    state.recipe = formatRecipeObj(data);
     if (state.bookmarks.some(bookmarkedRecipe => bookmarkedRecipe.id === id)) {
       state.recipe.bookmarked = true;
     } else {
@@ -124,6 +128,10 @@ export const uploadRecipe = async function (recipe) {
       servings: +recipe.servings,
       ingredients,
     };
+
+    const data = await sendJSON(`${API_URL}?key=${API_KEY}`, newRecipe);
+    state.recipe = formatRecipeObj(data);
+    addBookmark(state.recipe);
   } catch (err) {
     throw err;
   }

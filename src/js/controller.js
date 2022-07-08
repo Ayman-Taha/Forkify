@@ -70,6 +70,11 @@ const controlAddBookmark = function () {
 const controlAddRecipe = async function (newRecipe) {
   try {
     await model.uploadRecipe(newRecipe);
+    recipeView.render(model.state.recipe);
+    addRecipeView.renderMessage();
+    setTimeout(function () {
+      addRecipeView.toggleModal();
+    }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
     addRecipeView.renderError(err.message);
   }

@@ -2,6 +2,7 @@ import View from './View';
 
 class addRecipeView extends View {
   _parentEl = document.querySelector('.upload');
+  _message = 'Recipe was successfully uploaded!';
   _modal = document.querySelector('.add-recipe-window');
   _overlay = document.querySelector('.overlay');
   _btnOpenModal = document.querySelector('.nav__btn--add-recipe');
