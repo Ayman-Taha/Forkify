@@ -1,4 +1,3 @@
-import { async } from 'regenerator-runtime';
 import { TIMEOUT_SEC } from './config';
 
 const timeout = function (s) {
@@ -9,15 +8,15 @@ const timeout = function (s) {
   });
 };
 
-export const ajaxControl = async function (url, data = undefined) {
+export const ajaxControl = async function (url, sentData = undefined) {
   try {
-    const fetchPro = data
+    const fetchPro = sentData
       ? fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(sentData),
         })
       : fetch(url);
 

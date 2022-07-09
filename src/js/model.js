@@ -1,4 +1,3 @@
-import { async } from 'regenerator-runtime';
 import { API_KEY, API_URL, RES_PER_PAGE } from './config';
 import { ajaxControl, ajaxControl } from './helpers';
 
