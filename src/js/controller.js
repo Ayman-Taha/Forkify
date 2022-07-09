@@ -69,9 +69,12 @@ const controlAddBookmark = function () {
 
 const controlAddRecipe = async function (newRecipe) {
   try {
+    addRecipeView.loadSpinner();
     await model.uploadRecipe(newRecipe);
     recipeView.render(model.state.recipe);
     addRecipeView.renderMessage();
+    bookmarksView.render(model.state.bookmarks);
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
     setTimeout(function () {
       addRecipeView.toggleModal();
     }, MODAL_CLOSE_SEC * 1000);

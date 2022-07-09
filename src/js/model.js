@@ -1,6 +1,6 @@
 import { async } from 'regenerator-runtime';
 import { API_KEY, API_URL, RES_PER_PAGE } from './config';
-import { getJSON, sendJSON } from './helpers';
+import { ajaxControl, ajaxControl } from './helpers';
 
 export const state = {
   recipe: {},
@@ -31,7 +31,7 @@ const formatRecipeObj = function (data) {
 
 export const loadRecipe = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}/${id}`);
+    const data = await ajaxControl(`${API_URL}/${id}`);
     state.recipe = formatRecipeObj(data);
     if (state.bookmarks.some(bookmarkedRecipe => bookmarkedRecipe.id === id)) {
       state.recipe.bookmarked = true;
@@ -48,7 +48,7 @@ export const loadSearchResults = async function (query) {
     state.search.page = 1;
     state.search.query = query;
 
-    const data = await getJSON(`${API_URL}?search=${query})`);
+    const data = await ajaxControl(`${API_URL}?search=${query})`);
 
     state.search.results = data.data.recipes.map(recipe => {
       return {
@@ -129,7 +129,7 @@ export const uploadRecipe = async function (recipe) {
       ingredients,
     };
 
-    const data = await sendJSON(`${API_URL}?key=${API_KEY}`, newRecipe);
+    const data = await ajaxControl(`${API_URL}?key=${API_KEY}`, newRecipe);
     state.recipe = formatRecipeObj(data);
     addBookmark(state.recipe);
   } catch (err) {
