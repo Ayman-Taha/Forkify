@@ -30,7 +30,7 @@ const formatRecipeObj = function (data) {
 
 export const loadRecipe = async function (id) {
   try {
-    const data = await ajaxControl(`${API_URL}/${id}`);
+    const data = await ajaxControl(`${API_URL}/${id}?key=${API_KEY}`);
     state.recipe = formatRecipeObj(data);
     if (state.bookmarks.some(bookmarkedRecipe => bookmarkedRecipe.id === id)) {
       state.recipe.bookmarked = true;
@@ -47,7 +47,9 @@ export const loadSearchResults = async function (query) {
     state.search.page = 1;
     state.search.query = query;
 
-    const data = await ajaxControl(`${API_URL}?search=${query})`);
+    const data = await ajaxControl(
+      `${API_URL}?search=${query}&key=${API_KEY})`
+    );
 
     state.search.results = data.data.recipes.map(recipe => {
       return {
