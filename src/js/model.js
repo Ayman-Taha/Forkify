@@ -47,9 +47,7 @@ export const loadSearchResults = async function (query) {
     state.search.page = 1;
     state.search.query = query;
 
-    const data = await ajaxControl(
-      `${API_URL}?search=${query}&key=${API_KEY})`
-    );
+    const data = await ajaxControl(`${API_URL}?search=${query}&key=${API_KEY}`);
 
     state.search.results = data.data.recipes.map(recipe => {
       return {
